@@ -9,7 +9,7 @@
             v-bind:value="user.name"
             name="userName"
             type="text"
-            @input="user.name = $event.target.value"
+            @input="user.name = $event.target.value.trim()"
          />
          <label for="userName">Ім'я</label>
       </div>
@@ -18,7 +18,7 @@
             v-bind:value="user.surname"
             name="userSurname"
             type="text"
-            @input="user.surname = $event.target.value"
+            @input="user.surname = $event.target.value.trim()"
          />
          <label for="userName">Прізвище</label>
       </div>

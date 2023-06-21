@@ -3,7 +3,11 @@
       id="app-div"
       class="w-4/5 h-screen m-auto border border-slate-600 shadow-lg shadow-gray-500 overflow-hidden"
    >
-      <UserHeader @filter-change="sortData" @open-form="openForm" />
+      <UserHeader
+         @filter-change="sortData"
+         @open-form="openForm"
+         @search="findUsers"
+      />
       <UserList
          :userList="users"
          :loading="loadingList"
@@ -17,7 +21,7 @@
             @update="updateUser"
          />
       </modal-window>
-      <modal-window v-model:show="deleteForm" v-model:confirmWord="confirmWord">
+      <modal-window v-model:show="deleteForm">
          <DeleteConfirmation
             v-model:deletedUser="actionUser"
             @delete="deleteUser"
@@ -31,7 +35,7 @@ import UserHeader from "./components/UserHeader.vue";
 import UserList from "./components/UserList.vue";
 import UserForm from "./components/UserForm.vue";
 import DeleteConfirmation from "./components/DeleteConfirmation.vue";
-import { GET_USERS } from "./api/api.urls";
+import { GET_USERS, FIND_USERS } from "./api/api.urls";
 
 export default {
    components: { UserHeader, UserList, UserForm, DeleteConfirmation },
@@ -106,7 +110,10 @@ export default {
          })
             .then(() => {
                this.formDisplay = false;
-               this.getUsers();
+               const index = this.users.findIndex(({ userId }) => {
+                  return userId === user.userId;
+               });
+               this.users[index] = user;
             })
             .catch((error) => {
                console.error(error);
@@ -124,6 +131,22 @@ export default {
             .catch((error) => {
                console.error(error);
             });
+      },
+
+      async findUsers(searchString) {
+         if (searchString !== "") {
+            try {
+               fetch(FIND_USERS + `/${searchString}`)
+                  .then((response) => response.json())
+                  .then((data) => {
+                     this.users = data.data;
+                     this.loadingList = false;
+                  })
+                  .catch((error) => {
+                     console.error(error);
+                  });
+            } catch (e) {}
+         } else this.getUsers();
       },
    },
    mounted() {

@@ -19,7 +19,7 @@
          </svg>
       </span>
 
-      <search-bar v-model:text="searchbarText" />
+      <search-bar v-model:text="searchbarText" @submit-search="updateInput" />
       <table-select v-model="selectedSort" :options="sortOtions" />
    </header>
 </template>
@@ -41,6 +41,10 @@ export default {
    methods: {
       displayModal() {
          this.$emit("open-form", true, 0);
+      },
+
+      updateInput() {
+         this.$emit("search", this.searchbarText);
       },
    },
 

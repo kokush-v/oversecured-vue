@@ -1,5 +1,8 @@
 <template>
-   <label className="relative block w-1/5">
+   <form
+      @submit.prevent="$emit('submit-search')"
+      className="relative block w-1/5"
+   >
       <span class="absolute m-1">
          <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +28,7 @@
          type="text"
          name="search"
       />
-   </label>
+   </form>
 </template>
 
 <script>
@@ -36,7 +39,7 @@ export default {
    },
    methods: {
       updateInput(event) {
-         this.$emit("update:text", event.target.value);
+         this.$emit("update:text", event.target.value.trim());
       },
    },
    setup() {
