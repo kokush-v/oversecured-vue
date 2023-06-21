@@ -1,8 +1,8 @@
 <template>
-   <div>{{ formatDateNow(user.date) }}</div>
+   <div>{{ formatDateNow(user.userId) }}</div>
    <div>{{ user.name }}</div>
    <div>{{ user.surname }}</div>
-   <div class="btn">
+   <div class="btn" @click="$emit('open-form', user)">
       <svg
          xmlns="http://www.w3.org/2000/svg"
          fill="none"
@@ -17,7 +17,7 @@
          />
       </svg>
    </div>
-   <div class="btn">
+   <div class="btn" @click="$emit('delete-user', user)">
       <svg
          xmlns="http://www.w3.org/2000/svg"
          fill="none"
@@ -43,6 +43,7 @@ export default {
          surname: { type: String },
       },
    },
+   emits: ["open-form", "delete-user"],
    methods: {
       formatDateNow(date) {
          const currentDate = new Date(parseInt(date));

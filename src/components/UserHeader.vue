@@ -1,5 +1,5 @@
 <template>
-   <header class="bg-slate-600 flex justify-around items-center h-20">
+   <header class="bg-slate-600 flex justify-around items-center">
       <span class="flex items-center gap-10">
          <h1 class="text-white text-2xl">User <b>SERVICE</b></h1>
          <svg
@@ -9,6 +9,7 @@
             stroke-width="1.5"
             stroke="black"
             class="w-10 h-10 border bg-white border-white rounded-full p-1 cursor-pointer"
+            @click="displayModal"
          >
             <path
                stroke-linecap="round"
@@ -18,7 +19,7 @@
          </svg>
       </span>
 
-      <search-bar v-model="searchbarText" />
+      <search-bar v-model:text="searchbarText" />
       <table-select v-model="selectedSort" :options="sortOtions" />
    </header>
 </template>
@@ -37,8 +38,14 @@ export default {
       };
    },
 
+   methods: {
+      displayModal() {
+         this.$emit("open-form", true, 0);
+      },
+   },
+
    watch: {
-      selectedSort(value) {
+      selectedSort() {
          this.$emit("filter-change", this.selectedSort);
       },
    },
@@ -47,6 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 header {
+   height: 8%;
    h1 {
       b {
          color: rgb(229, 99, 99);
