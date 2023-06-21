@@ -30,7 +30,7 @@ export default {
       return {
          searchbarText: "",
          sortOtions: [
-            { value: "date", name: "За датою" },
+            { value: "userId", name: "За датою" },
             { value: "name", name: "За іменем" },
             { value: "surname", name: "За прізвищем" },
          ],
