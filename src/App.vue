@@ -6,7 +6,10 @@
       <UserHeader
          @filter-change="sortData"
          @open-form="openForm"
+         @reverse-list="users = users.reverse()"
          @search="findUsers"
+         v-model:searchBar="searchBar"
+         v-model:loading="searchBarLoading"
       />
       <UserList
          :userList="users"
@@ -46,6 +49,8 @@ export default {
          deleteForm: false,
          actionUser: {},
          loadingList: true,
+         searchBar: "",
+         searchBarLoading: false,
       };
    },
    methods: {
@@ -92,6 +97,7 @@ export default {
          })
             .then(() => {
                this.formDisplay = false;
+               this.searchBar = "";
                this.getUsers();
             })
 
@@ -126,29 +132,39 @@ export default {
          })
             .then(() => {
                this.deleteForm = false;
-               this.getUsers();
+               const index = this.users.findIndex(({ userId }) => {
+                  return userId === this.actionUser.userId;
+               });
+               console.log(index);
+               this.users.splice(index, 1);
             })
             .catch((error) => {
                console.error(error);
             });
       },
 
-      async findUsers(searchString) {
-         if (searchString !== "") {
+      async findUsers() {
+         console.log(this.searchBar);
+         if (this.searchBar !== "") {
             try {
-               fetch(FIND_USERS + `/${searchString}`)
+               fetch(FIND_USERS + `/${this.searchBar}`)
                   .then((response) => response.json())
                   .then((data) => {
                      this.users = data.data;
                      this.loadingList = false;
+                     this.searchBarLoading = false;
                   })
                   .catch((error) => {
                      console.error(error);
                   });
             } catch (e) {}
-         } else this.getUsers();
+         } else {
+            this.getUsers();
+            this.searchBarLoading = false;
+         }
       },
    },
+
    mounted() {
       this.getUsers();
    },
